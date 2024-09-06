@@ -122,6 +122,34 @@ class _HomePageState extends State<HomePage> {
                   if (userChosen == '') {
                     botChosen = '';
                     chosenObjectImage = '';
+                  } else {
+                    if (botChosen == userChosen) {
+                      matchResult = 'EMPATE!';
+                    }
+                    if (botChosen == 'Pedra' && userChosen == 'Papel') {
+                      matchResult = 'Você ganhou!';
+                      userScore++;
+                    }
+                    if (botChosen == 'Papel' && userChosen == 'Pedra') {
+                      matchResult = 'Bot ganhou!';
+                      botScore++;
+                    }
+                    if (botChosen == 'Tesoura' && userChosen == 'Papel') {
+                      matchResult = 'Bot ganhou!';
+                      botScore++;
+                    }
+                    if (botChosen == 'Papel' && userChosen == 'Tesoura') {
+                      matchResult = 'User ganhou!';
+                      userScore++;
+                    }
+                    if (botChosen == 'Tesoura' && userChosen == 'Pedra') {
+                      matchResult = 'User ganhou!';
+                      userScore++;
+                    }
+                    if (botChosen == 'Pedra' && userChosen == 'Tesoura') {
+                      matchResult = 'Bot ganhou!';
+                      botScore++;
+                    }
                   }
                 });
               },
