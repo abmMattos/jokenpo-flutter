@@ -1,5 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/components/bot_choice_display.dart';
+import 'package:project_flutter/components/choice_button.dart';
+import 'package:project_flutter/components/score_board.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +25,34 @@ class _HomePageState extends State<HomePage> {
   int userScore = 0; 
   int botScore = 0; 
 
+  void _playGame(String choice) {
+    setState(() {
+      userChosen = choice;
+      int rand = Random().nextInt(3);
+      botChosen = randChosen[rand];
+      chosenObjectImage = objectImages[rand];
+
+      if (userChosen == '') {
+        botChosen = '';
+        chosenObjectImage = '';
+        matchResult = '';
+        return;
+      }
+
+      if (botChosen == userChosen) {
+        matchResult = 'EMPATE!';
+      } else if ((botChosen == 'Pedra' && userChosen == 'Papel') ||
+                 (botChosen == 'Papel' && userChosen == 'Tesoura') ||
+                 (botChosen == 'Tesoura' && userChosen == 'Pedra')) {
+        matchResult = 'Você ganhou!';
+        userScore++;
+      } else {
+        matchResult = 'Bot ganhou!';
+        botScore++;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,71 +67,20 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      userChosen = 'Pedra';
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://wesraiuga.github.io/games/assets/img/jokenpo/jokenpo-user-pedra.png'),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    height: 100,
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  ),
-                ),
+              ChoiceButton(
+                imageUrl: 'https://wesraiuga.github.io/games/assets/img/jokenpo/jokenpo-user-pedra.png',
+                choice: 'Pedra',
+                onTap: () => _playGame('Pedra'),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      userChosen = 'Papel';
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTPrOal_vl1zWqqmynV-eQh2gsJMvnrQsLS2X1umBCAIoJ8jn-XDPG_cjT54Bb7CZfUco&usqp=CAU'),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    height: 100,
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  ),
-                ),
+              ChoiceButton(
+                imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTPrOal_vl1zWqqmynV-eQh2gsJMvnrQsLS2X1umBCAIoJ8jn-XDPG_cjT54Bb7CZfUco&usqp=CAU',
+                choice: 'Papel',
+                onTap: () => _playGame('Papel'),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      userChosen = 'Tesoura';
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://wesraiuga.github.io/games/assets/img/jokenpo/jokenpo-user-tesoura.png'),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    height: 100,
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  ),
-                ),
+              ChoiceButton(
+                imageUrl: 'https://wesraiuga.github.io/games/assets/img/jokenpo/jokenpo-user-tesoura.png',
+                choice: 'Tesoura',
+                onTap: () => _playGame('Tesoura'),
               ),
             ],
           ),
@@ -113,74 +93,12 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 20),
           Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  int rand = Random().nextInt(3);
-                  botChosen = randChosen[rand];
-                  chosenObjectImage = objectImages[rand];
-                  if (userChosen == '') {
-                    botChosen = '';
-                    chosenObjectImage = '';
-                  } else {
-                    if (botChosen == userChosen) {
-                      matchResult = 'EMPATE!';
-                    }
-                    if (botChosen == 'Pedra' && userChosen == 'Papel') {
-                      matchResult = 'Você ganhou!';
-                      userScore++;
-                    }
-                    if (botChosen == 'Papel' && userChosen == 'Pedra') {
-                      matchResult = 'Bot ganhou!';
-                      botScore++;
-                    }
-                    if (botChosen == 'Tesoura' && userChosen == 'Papel') {
-                      matchResult = 'Bot ganhou!';
-                      botScore++;
-                    }
-                    if (botChosen == 'Papel' && userChosen == 'Tesoura') {
-                      matchResult = 'User ganhou!';
-                      userScore++;
-                    }
-                    if (botChosen == 'Tesoura' && userChosen == 'Pedra') {
-                      matchResult = 'User ganhou!';
-                      userScore++;
-                    }
-                    if (botChosen == 'Pedra' && userChosen == 'Tesoura') {
-                      matchResult = 'Bot ganhou!';
-                      botScore++;
-                    }
-                  }
-                });
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green,
-                  image: DecorationImage(
-                    image: NetworkImage(chosenObjectImage),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    botChosen.isEmpty ? '' : botChosen,
-                    style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+            child: BotChoiceDisplay(
+              chosenObjectImage: chosenObjectImage,
+              botChosen: botChosen,
             ),
           ),
           SizedBox(height: 20),
-          Center(
-            child: Text(
-              'Clique no botão acima para selecionar a jogada do robô\n\nResultado:',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ),
           Center(
             child: Text(
               matchResult,
@@ -189,38 +107,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(height: 20),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.green,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'USER\n\n${userScore}',
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'BOT\n\n${botScore}',
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          ScoreBoard(
+            userScore: userScore,
+            botScore: botScore,
           ),
         ],
       ),
